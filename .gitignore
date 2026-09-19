@@ -1,0 +1,5 @@
+node_modules
+dist
+.typst-check
+*.local
+.DS_Store
