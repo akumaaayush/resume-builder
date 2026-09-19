@@ -63,6 +63,37 @@ browser-cached; compiles after that are ~100 ms for this document.
 | `Ctrl+S` | Save to the linked file |
 | `Ctrl+Z` / `Ctrl+Shift+Z` | Undo / redo |
 
+## Deploying to Cloudflare
+
+The compiler wasm is ~27 MiB and Cloudflare caps static assets at **25 MiB per
+file**, so a plain `pnpm build` cannot be deployed as-is:
+
+```
+Asset too large. Cloudflare Workers supports assets with sizes of up to 25 MiB.
+```
+
+The Cloudflare build loads that one file from jsDelivr instead of bundling it:
+
+```
+pnpm build:cf   # vite build --mode cloudflare
+pnpm deploy     # build:cf, then wrangler deploy
+```
+
+`--mode cloudflare` loads `.env.cloudflare`, which sets
+`VITE_TYPST_COMPILER_WASM_URL`. That constant folds at build time, so the
+bundled import in `src/typst/engine.ts` becomes dead code and the 27 MiB file is
+never emitted — the largest asset in `dist/` drops to under 1 MiB. Fonts and the
+renderer wasm stay local, so only the first compile of a session reaches the
+network.
+
+Building through Cloudflare's git integration instead of the CLI? Set the build
+command to `pnpm run build:cf` and the output directory to `dist`. Setting
+`VITE_TYPST_COMPILER_WASM_URL` as a dashboard build variable works too — Vite
+picks up prefixed variables from the environment.
+
+`pnpm build` deliberately keeps the wasm bundled, so self-hosted and local
+builds stay fully offline.
+
 ## Theming
 
 Dark by default, toggled from the toolbar and remembered in localStorage. The

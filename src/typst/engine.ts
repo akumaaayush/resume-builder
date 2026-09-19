@@ -1,6 +1,5 @@
 import { $typst } from '@myriaddreamin/typst.ts'
 import { TypstSnippet } from '@myriaddreamin/typst.ts/contrib/snippet'
-import compilerWasm from '@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm?url'
 import rendererWasm from '@myriaddreamin/typst-ts-renderer/pkg/typst_ts_renderer_bg.wasm?url'
 import templateSource from './resume.typ?raw'
 import githubIcon from './icons/github.svg?raw'
@@ -28,10 +27,25 @@ const FONT_FILES = [
 
 const fontUrls = FONT_FILES.map((f) => `${import.meta.env.BASE_URL}fonts/${f}`)
 
+/**
+ * The compiler wasm is ~27 MiB, which is over Cloudflare's 25 MiB per-file cap
+ * for static assets. Setting VITE_TYPST_COMPILER_WASM_URL points the loader at
+ * a CDN copy instead; because the constant folds at build time, the bundled
+ * import below becomes dead code and the file is never emitted into dist/.
+ */
+const compilerWasmOverride = import.meta.env.VITE_TYPST_COMPILER_WASM_URL
+
+async function compilerModule(): Promise<string> {
+  if (compilerWasmOverride) return compilerWasmOverride
+  const mod = await import('@myriaddreamin/typst-ts-web-compiler/pkg/typst_ts_web_compiler_bg.wasm?url')
+  return mod.default
+}
+
 let bootstrap: Promise<void> | undefined
 
 function init(): Promise<void> {
   bootstrap ??= (async () => {
+    const compilerWasm = await compilerModule()
     $typst.setCompilerInitOptions({ getModule: () => compilerWasm })
     $typst.setRendererInitOptions({ getModule: () => rendererWasm })
     // Skip the CDN-hosted default font bundle; we ship exactly what the

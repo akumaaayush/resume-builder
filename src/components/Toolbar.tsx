@@ -6,6 +6,7 @@ import { fileStore, linkNewFile, openFile, save, unlink } from '../store/file'
 import { historyStore, redo, replaceResume, resetResume, undo } from '../store/resume'
 import { themeStore, toggleTheme } from '../store/theme'
 import type { Resume } from '../types'
+import { Logo } from './Logo'
 import { Btn } from './ui'
 
 export function Toolbar({
@@ -50,8 +51,9 @@ export function Toolbar({
 
   return (
     <header className="flex flex-wrap items-center gap-2 border-b border-line bg-surface px-4 py-2.5">
-      <h1 className="mr-1 text-sm font-semibold tracking-tight text-ink">
-        Résumé<span className="text-faint"> · typst</span>
+      <h1 className="mr-1 flex items-center gap-2 text-sm font-semibold tracking-tight text-ink">
+        <Logo className="h-[22px] w-[22px] rounded-[5px]" />
+        Résumé<span className="font-normal text-faint">· typst</span>
       </h1>
 
       <Btn onClick={undo} disabled={!canUndo} data-tip="Undo (Ctrl+Z)">
@@ -92,7 +94,7 @@ export function Toolbar({
       <Btn onClick={() => downloadJson(resume)}>Export JSON</Btn>
       <Btn
         onClick={() => {
-          if (confirm('Reset to the original LaTeX resume? Your edits can still be undone.')) {
+          if (confirm('Reset to the starter resume? Your edits can still be undone.')) {
             resetResume()
           }
         }}
