@@ -1,4 +1,4 @@
-import { defaultResume } from '../data/defaultResume'
+import { defaultConfig } from '../data/defaultConfig'
 import type { Resume, Section, SectionKind } from '../types'
 
 /**
@@ -26,7 +26,7 @@ export function normalizeResume(input: unknown): Resume {
   const header = obj(root.header)
   const config = obj(root.config)
   const margin = obj(config.margin)
-  const d = defaultResume.config
+  const d = defaultConfig
 
   return {
     config: {

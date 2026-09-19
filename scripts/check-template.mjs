@@ -8,7 +8,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { NodeCompiler } from '@myriaddreamin/typst-ts-node-compiler'
-import { defaultResume } from '../src/data/defaultResume.ts'
 
 const root = path.resolve(import.meta.dirname, '..')
 const work = path.join(root, '.typst-check')
@@ -16,16 +15,11 @@ const work = path.join(root, '.typst-check')
 fs.mkdirSync(work, { recursive: true })
 fs.copyFileSync(path.join(root, 'src/typst/resume.typ'), path.join(work, 'resume.typ'))
 fs.cpSync(path.join(root, 'src/typst/icons'), path.join(work, 'icons'), { recursive: true })
-// Exercise the optional project icon links, which the seed leaves blank.
-const fixture = structuredClone(defaultResume)
-for (const section of fixture.sections) {
-  if (section.kind === 'projects' && section.items[0]) {
-    section.items[0].repoUrl = 'https://github.com/example/repo'
-    section.items[0].liveUrl = 'https://example.com'
-  }
-}
+// The template reads plain data and never touches ids, so the seed JSON can go
+// to the compiler exactly as it sits on disk.
+const seed = JSON.parse(fs.readFileSync(path.join(root, 'src/data/defaultResume.json'), 'utf8'))
 
-fs.writeFileSync(path.join(work, 'resume.json'), JSON.stringify(fixture, null, 2))
+fs.writeFileSync(path.join(work, 'resume.json'), JSON.stringify(seed, null, 2))
 
 const compiler = NodeCompiler.create({
   workspace: work,

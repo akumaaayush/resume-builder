@@ -22,11 +22,16 @@ src/typst/resume.typ (template)
 - `src/typst/resume.typ` is a plain Typst file. It reads its content from
   `resume.json`, which the app injects as a shadow file before every compile, so
   no user text is ever interpolated into template source — no escaping bugs.
+- `src/data/defaultResume.json` is the starter document shown on first run and
+  restored by **Reset**. It is plain JSON on purpose — edit it directly, no ids
+  needed; `normalizeResume` fills in anything left out and assigns ids at load.
 - `src/types.ts` defines the JSON shape. **Renaming a field there means renaming
   it in `resume.typ` too** — that file is the contract.
 - Fonts (New Computer Modern, the Typst equivalent of LaTeX's Computer Modern)
   are self-hosted in `public/fonts/` and preloaded, with the default remote font
-  bundle disabled.
+  bundle disabled. Nothing is installed on the machine and nothing is fetched
+  from Google Fonts; Typst embeds the faces into the PDF, so it renders the same
+  on a machine that has never seen the font.
 
 ## Stack
 

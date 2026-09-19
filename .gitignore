@@ -3,3 +3,6 @@ dist
 .typst-check
 *.local
 .DS_Store
+
+# Personal resume data kept out of version control
+examples/*.local.json

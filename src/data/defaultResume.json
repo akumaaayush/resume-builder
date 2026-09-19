@@ -1,0 +1,213 @@
+{
+  "config": {
+    "margin": { "top": 0.5, "right": 0.375, "bottom": 0.5, "left": 0.625 },
+    "fontSize": 10,
+    "itemSize": 9,
+    "font": "New Computer Modern",
+    "nameSize": 14.4,
+    "headingSize": 12,
+    "blockSpacing": 4,
+    "leading": 0.6,
+    "marker": "•"
+  },
+  "header": {
+    "name": "Jordan Ellis",
+    "nameUrl": "https://www.linkedin.com/in/yourhandle",
+    "email": "jordan.ellis@example.com",
+    "phone": "+1 (555) 012-3456",
+    "location": "San Francisco, CA",
+    "profiles": [
+      { "label": "LinkedIn", "url": "https://www.linkedin.com/in/yourhandle" },
+      { "label": "GitHub", "url": "https://github.com/yourhandle" },
+      { "label": "Portfolio", "url": "https://yourdomain.com" }
+    ]
+  },
+  "sections": [
+    {
+      "kind": "bullets",
+      "title": "Professional Summary",
+      "enabled": true,
+      "items": [
+        {
+          "text": "Software Engineer with 5+ years building and operating production web services, most recently in logistics and payments."
+        },
+        {
+          "text": "Focused on backend systems: API design, relational data modelling, and keeping p95 latency predictable as traffic grows."
+        },
+        {
+          "text": "Comfortable owning a feature end to end, from schema and API through frontend integration, deployment, and on-call."
+        },
+        {
+          "text": "Enjoys mentoring, writing things down, and leaving systems easier to change than they were found."
+        }
+      ]
+    },
+    {
+      "kind": "bullets",
+      "title": "Technical Skills",
+      "enabled": true,
+      "items": [
+        { "text": "Languages: TypeScript, Python, Go, SQL" },
+        { "text": "Backend: Node.js, Express, NestJS, FastAPI, REST, GraphQL, gRPC" },
+        { "text": "Frontend: React, Next.js, Vue, Tailwind CSS, Vitest, Playwright" },
+        { "text": "Data: PostgreSQL, MySQL, MongoDB, Redis, Elasticsearch, Prisma, Kafka" },
+        { "text": "Infrastructure: Docker, Kubernetes, Terraform, AWS (EC2, ECS, RDS, S3, Lambda)" },
+        { "text": "Delivery: GitHub Actions, GitLab CI, Jenkins, blue/green and canary deploys" },
+        { "text": "Observability: OpenTelemetry, Grafana, Prometheus, Datadog, Sentry" }
+      ]
+    },
+    {
+      "kind": "timeline",
+      "title": "Experience",
+      "enabled": true,
+      "entries": [
+        {
+          "org": "Northwind Logistics",
+          "location": "San Francisco, CA",
+          "role": "Senior Software Engineer",
+          "period": "March 2023 - Present",
+          "bullets": [
+            {
+              "label": "Platform Ownership",
+              "text": "Own the shipment tracking service handling 40M events per day, including schema design, API contracts, and production on-call."
+            },
+            {
+              "label": "Performance",
+              "text": "Cut p95 API latency from 820ms to 190ms by adding covering indexes, replacing N+1 queries with batched loaders, and caching hot lookups in Redis."
+            },
+            {
+              "label": "Migration",
+              "text": "Led the incremental extraction of billing from the monolith into a separate service, shipping behind a feature flag with zero customer-facing downtime."
+            },
+            {
+              "label": "Reliability",
+              "text": "Introduced structured logging and distributed tracing, reducing median incident diagnosis time from roughly 45 minutes to under 10."
+            },
+            {
+              "label": "Mentorship",
+              "text": "Mentor two junior engineers, run the team's design review rotation, and maintain the service onboarding guide."
+            }
+          ]
+        },
+        {
+          "org": "Brightline Payments",
+          "location": "Remote",
+          "role": "Software Engineer",
+          "period": "June 2021 - February 2023",
+          "bullets": [
+            {
+              "label": "Payments API",
+              "text": "Built and maintained idempotent REST endpoints for card capture, refunds, and reconciliation, processing roughly $12M in monthly volume."
+            },
+            {
+              "label": "Data Integrity",
+              "text": "Designed the double-entry ledger schema and reconciliation jobs that brought month-end settlement discrepancies to zero."
+            },
+            {
+              "label": "Automation",
+              "text": "Replaced a manual release checklist with a GitHub Actions pipeline covering tests, migrations, and staged rollout, taking deploys from weekly to daily."
+            },
+            {
+              "label": "Compliance",
+              "text": "Implemented audit logging and field-level encryption for cardholder data as part of the company's first PCI DSS assessment."
+            }
+          ]
+        },
+        {
+          "org": "Cobalt Studio",
+          "location": "Austin, TX",
+          "role": "Junior Software Engineer",
+          "period": "July 2019 - May 2021",
+          "bullets": [
+            {
+              "label": "Client Delivery",
+              "text": "Shipped features across six client web applications using React and Node.js, from discovery through launch and handover."
+            },
+            {
+              "label": "Testing",
+              "text": "Raised test coverage on the shared component library from 18% to 76%, cutting regression bugs reported after release."
+            },
+            {
+              "label": "Tooling",
+              "text": "Standardised project scaffolding and linting across the team, removing most setup friction for new repositories."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "projects",
+      "title": "Projects",
+      "enabled": true,
+      "items": [
+        {
+          "name": "Tidepool",
+          "summary": "Self-hosted analytics for small sites, with a privacy-first collector and a real-time dashboard.",
+          "stack": "built with Go, ClickHouse, React, and Docker Compose",
+          "repoUrl": "https://github.com/yourhandle/tidepool",
+          "liveUrl": "https://tidepool.example.com"
+        },
+        {
+          "name": "Cardstack",
+          "summary": "Spaced-repetition flashcard app with offline support and shareable decks.",
+          "stack": "built with Next.js, TypeScript, PostgreSQL, Prisma, and a service worker",
+          "repoUrl": "https://github.com/yourhandle/cardstack",
+          "liveUrl": ""
+        },
+        {
+          "name": "Ledgerline",
+          "summary": "Command-line tool that turns plain-text double-entry journals into monthly reports.",
+          "stack": "built with Python, Typer, and SQLite",
+          "repoUrl": "https://github.com/yourhandle/ledgerline",
+          "liveUrl": ""
+        }
+      ]
+    },
+    {
+      "kind": "timeline",
+      "title": "Education",
+      "enabled": true,
+      "entries": [
+        {
+          "org": "University of Illinois Urbana-Champaign",
+          "location": "Urbana, IL",
+          "role": "BSc. Computer Science; GPA: 3.7 / 4.0",
+          "period": "2015 - 2019",
+          "bullets": []
+        }
+      ]
+    },
+    {
+      "kind": "labeled",
+      "title": "Certifications & Awards",
+      "enabled": true,
+      "items": [
+        {
+          "label": "AWS Certified Solutions Architect - Associate",
+          "text": "- Amazon Web Services",
+          "meta": "2024"
+        },
+        {
+          "label": "Engineering Excellence Award",
+          "text": "- Northwind Logistics, for the billing extraction project",
+          "meta": "2024"
+        },
+        {
+          "label": "Runner Up",
+          "text": "- Bay Area Open Data Hackathon",
+          "meta": "2022"
+        }
+      ]
+    },
+    {
+      "kind": "bullets",
+      "title": "Languages",
+      "enabled": true,
+      "items": [
+        { "text": "English (Native)" },
+        { "text": "Spanish (Professional)" },
+        { "text": "German (Conversational)" }
+      ]
+    }
+  ]
+}
