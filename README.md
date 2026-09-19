@@ -139,3 +139,4 @@ does not recognise rather than failing the import.
 | no justification | `\raggedright` |
 
 All of these are editable in the Layout panel.
+
