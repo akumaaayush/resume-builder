@@ -2,6 +2,7 @@ import { Store } from '@tanstack/store'
 import { defaultResume } from '../data/defaultResume'
 import type {
   Bullet,
+  DividerVariant,
   DocConfig,
   Header,
   LabeledItem,
@@ -154,7 +155,12 @@ export function emptySection(kind: SectionKind): Section {
   const base = { id: uid(), title: 'New Section', enabled: true }
   switch (kind) {
     case 'bullets':
+    case 'prose':
       return { ...base, kind, items: [{ id: uid(), text: '' }] }
+    case 'inline':
+      return { ...base, kind, items: [{ id: uid(), label: '', text: '' }] }
+    case 'divider':
+      return { ...base, kind, variant: 'space' }
     case 'timeline':
       return { ...base, kind, entries: [newEntry()] }
     case 'projects':
@@ -170,6 +176,11 @@ function newEntry(): TimelineEntry {
 
 export function addSection(kind: SectionKind, at?: number) {
   commit((doc) => ({ ...doc, sections: insert(doc.sections, emptySection(kind), at) }))
+}
+
+/** Insert a ready-made section (see `data/presets.ts`). */
+export function insertSection(section: Section, at?: number) {
+  commit((doc) => ({ ...doc, sections: insert(doc.sections, section, at) }))
 }
 
 export function removeSection(id: string) {
@@ -197,7 +208,7 @@ type ItemOf<K extends SectionKind> = K extends 'bullets'
     : LabeledItem
 
 function withItems(s: Section, fn: (items: any[]) => any[]): Section {
-  if (s.kind === 'timeline') return s
+  if (s.kind === 'timeline' || s.kind === 'divider') return s
   return { ...s, items: fn(s.items) } as Section
 }
 
@@ -209,6 +220,9 @@ export function addItem(sectionId: string, at?: number) {
         return { ...s, items: insert(s.items, { id: uid(), name: '', summary: '', stack: '', repoUrl: '', liveUrl: '' }, at) }
       if (s.kind === 'labeled')
         return { ...s, items: insert(s.items, { id: uid(), label: '', text: '', meta: '' }, at) }
+      if (s.kind === 'inline')
+        return { ...s, items: insert(s.items, { id: uid(), label: '', text: '' }, at) }
+      if (s.kind === 'divider') return s
       return { ...s, items: insert(s.items, { id: uid(), text: '' }, at) }
     }),
   )
@@ -230,6 +244,10 @@ export function removeItem(sectionId: string, itemId: string) {
   commit((doc) =>
     mapSection(doc, sectionId, (s) => withItems(s, (items) => items.filter((it) => it.id !== itemId))),
   )
+}
+
+export function setDividerVariant(id: string, variant: DividerVariant) {
+  commit((doc) => mapSection(doc, id, (s) => (s.kind === 'divider' ? { ...s, variant } : s)))
 }
 
 /** Works for both item-based and timeline sections. */

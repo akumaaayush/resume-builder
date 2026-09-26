@@ -1,4 +1,4 @@
-# Résumé builder (Typst in the browser)
+# LaTeX Résumé Builder
 
 A local resume builder that produces the same output as the original Overleaf
 LaTeX resume — without installing LaTeX. Typst is compiled to WebAssembly and
@@ -6,9 +6,10 @@ runs entirely in the browser: no server, no CDN calls at compile time.
 
 ```
 pnpm install
-pnpm dev             # editor at http://localhost:5173
+pnpm dev             # landing at http://localhost:5173, editor at /edit
 pnpm build           # static bundle in dist/
 pnpm check:template  # compile the template headlessly (no browser)
+pnpm gen:preview     # regenerate the landing page hero from the template
 ```
 
 ## How it works
@@ -54,6 +55,33 @@ browser-cached; compiles after that are ~100 ms for this document.
 - Sections can be toggled off without deleting them (the `on` checkbox).
 - Undo/redo covers every edit. State autosaves to localStorage.
 
+### Section types
+
+| Kind | Renders as |
+|---|---|
+| `prose` | Paragraphs, no bullets. Use for the opening summary |
+| `bullets` | Plain bullet list |
+| `inline` | Compact `Label   value, value` rows on one aligned grid. Fits far more than a bullet each, so it is the right shape for skills and languages |
+| `timeline` | Org + location, role + period, then bullets. Experience and education |
+| `projects` | Name with optional repo/live icons, summary, stack |
+| `labeled` | Bold label, text, trailing meta. Awards, certifications, publications |
+| `divider` | `page` forces a page break, `rule` draws a line, `space` adds a gap. No heading |
+
+**+ Add section** (and the strip between sections) opens a searchable picker of
+ready-made sections — Summary, Experience, Skills, Certifications, Publications,
+Volunteering and so on — each already the right kind with a correctly shaped
+example row. Blank kinds are at the bottom of the list.
+
+Multi-column layouts are deliberately absent: ATS parsers read them badly and
+can scramble the order of your experience.
+
+### Page fit
+
+The toolbar reads `2 pages · trim 3.2in to fit 1`, or `1 page · 4.1in free`.
+The template emits a `<resume-fit>` metadata block, and the app queries it after
+each compile — Typst's incremental cache makes that near-free (~27 ms for a full
+edit cycle, measured in-browser).
+
 - Projects take optional **Repo URL** and **Live URL**. Each one renders a
   clickable icon (GitHub mark, globe) beside the project name in the PDF; leave
   a field blank and its icon disappears.
@@ -62,6 +90,19 @@ browser-cached; compiles after that are ~100 ms for this document.
 |---|---|
 | `Ctrl+S` | Save to the linked file |
 | `Ctrl+Z` / `Ctrl+Shift+Z` | Undo / redo |
+
+## Landing page
+
+`/` is a single-viewport landing page and `/edit` is the editor. Two routes did
+not justify a router dependency, so `src/Root.tsx` switches on
+`window.location.pathname` and pushes history; the Cloudflare SPA fallback
+serves `index.html` for both.
+
+Its hero is `public/resume-preview.webp`, rendered from the same template the
+editor compiles (`pnpm gen:preview`) so the shot cannot drift from the product.
+It is committed because Cloudflare's build image has no native Typst compiler,
+and the landing page must not pull the 27 MiB wasm just to show a picture.
+Regenerating needs Python with `pypdfium2` and `pillow`.
 
 ## Deploying to Cloudflare
 

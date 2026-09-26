@@ -5,26 +5,20 @@ import { HeaderEditor } from './components/HeaderEditor'
 import { ImportDialog } from './components/ImportDialog'
 import { Preview } from './components/Preview'
 import { SectionEditor } from './components/SectionEditor'
+import { SectionPicker } from './components/SectionPicker'
 import { SortableList, SortableRow } from './components/Sortable'
 import { Toolbar } from './components/Toolbar'
-import { Btn } from './components/ui'
-import { useDebounced } from './lib/hooks'
+import { useCompiledDoc, useDebounced } from './lib/hooks'
 import { restoreLink, save } from './store/file'
-import { addSection, redo, reorderSections, resumeStore, undo } from './store/resume'
-import type { SectionKind } from './types'
+import { redo, reorderSections, resumeStore, undo } from './store/resume'
 
-const NEW_SECTION: { kind: SectionKind; label: string }[] = [
-  { kind: 'bullets', label: 'Bullet list' },
-  { kind: 'timeline', label: 'Timeline' },
-  { kind: 'projects', label: 'Projects' },
-  { kind: 'labeled', label: 'Labeled list' },
-]
-
-export default function App() {
+export default function App({ onHome }: { onHome: () => void }) {
   const resume = useStore(resumeStore)
   // Typst compiles this document in ~100ms, but debouncing keeps typing smooth
   // and stops the compile queue from backing up.
   const debounced = useDebounced(resume, 300)
+  const { data, error, isFetching, isPending } = useCompiledDoc(debounced)
+
   const [zoom, setZoom] = useState(0.9)
   const [splitPct, setSplitPct] = useState(42)
   const [importing, setImporting] = useState(false)
@@ -73,12 +67,15 @@ export default function App() {
   }, [onDrag])
 
   return (
-    <div className="flex h-screen flex-col bg-raised">
+    <div className="flex h-screen flex-col bg-canvas">
       <Toolbar
         resume={resume}
         zoom={zoom}
         setZoom={setZoom}
         onStartFromCv={() => setImporting(true)}
+        onHome={onHome}
+        fit={data?.fit}
+        fitStale={isFetching}
       />
 
       <div className="flex min-h-0 flex-1">
@@ -101,16 +98,7 @@ export default function App() {
               </div>
             </SortableList>
 
-            <div className="flex flex-wrap items-center gap-2 rounded-lg border border-dashed border-line p-3">
-              <span className="text-[10px] font-medium uppercase tracking-wider text-dim">
-                Add section
-              </span>
-              {NEW_SECTION.map((s) => (
-                <Btn key={s.kind} onClick={() => addSection(s.kind)}>
-                  + {s.label}
-                </Btn>
-              ))}
-            </div>
+            <AddSectionPanel />
 
             <ConfigPanel config={resume.config} />
           </div>
@@ -127,7 +115,13 @@ export default function App() {
         />
 
         <div className="min-w-0 flex-1">
-          <Preview resume={debounced} zoom={zoom} />
+          <Preview
+            svg={data?.svg}
+            error={error}
+            isFetching={isFetching}
+            isPending={isPending}
+            zoom={zoom}
+          />
         </div>
       </div>
 
@@ -140,26 +134,7 @@ export default function App() {
 function SectionInserter({ at }: { at: number }) {
   const [open, setOpen] = useState(false)
 
-  if (open) {
-    return (
-      <div className="flex flex-wrap items-center gap-1 rounded-md border border-line bg-surface p-1.5 shadow-sm">
-        {NEW_SECTION.map((s) => (
-          <Btn
-            key={s.kind}
-            onClick={() => {
-              addSection(s.kind, at)
-              setOpen(false)
-            }}
-          >
-            + {s.label}
-          </Btn>
-        ))}
-        <Btn variant="danger" onClick={() => setOpen(false)} aria-label="Cancel">
-          ✕
-        </Btn>
-      </div>
-    )
-  }
+  if (open) return <SectionPicker at={at} onDone={() => setOpen(false)} />
 
   return (
     <button
@@ -173,6 +148,22 @@ function SectionInserter({ at }: { at: number }) {
         + section
       </span>
       <span className="h-px flex-1 bg-line" />
+    </button>
+  )
+}
+
+function AddSectionPanel() {
+  const [open, setOpen] = useState(false)
+
+  if (open) return <SectionPicker onDone={() => setOpen(false)} />
+
+  return (
+    <button
+      type="button"
+      onClick={() => setOpen(true)}
+      className="rounded-lg border border-dashed border-line p-3 text-xs font-medium text-dim transition hover:border-accent hover:text-ink"
+    >
+      + Add section
     </button>
   )
 }

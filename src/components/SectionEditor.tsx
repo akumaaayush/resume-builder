@@ -9,31 +9,46 @@ import {
   renameSection,
   reorderBullets,
   reorderInSection,
+  setDividerVariant,
   toggleSection,
   updateBullet,
   updateEntry,
   updateItem,
 } from '../store/resume'
-import type { Section, TimelineEntry } from '../types'
+import type { DividerVariant, Section, TimelineEntry } from '../types'
 import { SortableList, SortableRow } from './Sortable'
 import { Btn, Field, RowTools, TextArea, TextInput } from './ui'
 
 const KIND_LABEL: Record<Section['kind'], string> = {
   bullets: 'bullet list',
+  prose: 'prose',
+  inline: 'inline list',
   timeline: 'timeline',
   projects: 'projects',
   labeled: 'labeled list',
+  divider: 'divider',
 }
 
 const ADD_LABEL: Record<Section['kind'], string> = {
   bullets: '+ Bullet',
+  prose: '+ Paragraph',
+  inline: '+ Row',
   timeline: '+ Entry',
   projects: '+ Project',
   labeled: '+ Item',
+  divider: '',
+}
+
+const DIVIDER_LABEL: Record<DividerVariant, string> = {
+  page: 'Page break',
+  rule: 'Horizontal rule',
+  space: 'Extra space',
 }
 
 function rowIds(section: Section): string[] {
-  return section.kind === 'timeline' ? section.entries.map((e) => e.id) : section.items.map((i) => i.id)
+  if (section.kind === 'timeline') return section.entries.map((e) => e.id)
+  if (section.kind === 'divider') return []
+  return section.items.map((i) => i.id)
 }
 
 export function SectionEditor({ section, dragHandle }: { section: Section; dragHandle: ReactNode }) {
@@ -74,11 +89,74 @@ export function SectionEditor({ section, dragHandle }: { section: Section; dragH
       </summary>
 
       <div className="flex flex-col gap-3 border-t border-line px-3 py-3">
+        {section.kind === 'divider' && (
+          <div className="flex flex-wrap items-center gap-1">
+            {(Object.keys(DIVIDER_LABEL) as DividerVariant[]).map((variant) => (
+              <Btn
+                key={variant}
+                variant={section.variant === variant ? 'solid' : 'ghost'}
+                onClick={() => setDividerVariant(section.id, variant)}
+              >
+                {DIVIDER_LABEL[variant]}
+              </Btn>
+            ))}
+          </div>
+        )}
+
         <SortableList
           ids={rowIds(section)}
           onReorder={(from, to) => reorderInSection(section.id, from, to)}
         >
           <div className="flex flex-col gap-3">
+            {section.kind === 'prose' &&
+              section.items.map((item, i) => (
+                <SortableRow key={item.id} id={item.id}>
+                  {(handle) => (
+                    <div className="flex items-start gap-1">
+                      <span className="pt-1.5">{handle}</span>
+                      <TextArea
+                        rows={3}
+                        value={item.text}
+                        placeholder="One paragraph. No bullet is added."
+                        onChange={(e) => updateItem(section.id, item.id, { text: e.target.value })}
+                      />
+                      <RowTools
+                        onInsert={() => addItem(section.id, i + 1)}
+                        onRemove={() => removeItem(section.id, item.id)}
+                      />
+                    </div>
+                  )}
+                </SortableRow>
+              ))}
+
+            {section.kind === 'inline' &&
+              section.items.map((item, i) => (
+                <SortableRow key={item.id} id={item.id}>
+                  {(handle) => (
+                    <div className="flex items-start gap-1">
+                      <span className="pt-1.5">{handle}</span>
+                      <div className="flex min-w-0 flex-1 gap-2">
+                        <TextInput
+                          value={item.label}
+                          placeholder="Label"
+                          className="w-32 shrink-0"
+                          onChange={(e) => updateItem(section.id, item.id, { label: e.target.value })}
+                        />
+                        <TextInput
+                          value={item.text}
+                          placeholder="TypeScript, Go, SQL"
+                          onChange={(e) => updateItem(section.id, item.id, { text: e.target.value })}
+                        />
+                      </div>
+                      <RowTools
+                        onInsert={() => addItem(section.id, i + 1)}
+                        onRemove={() => removeItem(section.id, item.id)}
+                      />
+                    </div>
+                  )}
+                </SortableRow>
+              ))}
+
             {section.kind === 'bullets' &&
               section.items.map((item, i) => (
                 <SortableRow key={item.id} id={item.id}>
@@ -205,9 +283,11 @@ export function SectionEditor({ section, dragHandle }: { section: Section; dragH
           </div>
         </SortableList>
 
-        <Btn onClick={() => addItem(section.id)} className="self-start">
-          {ADD_LABEL[section.kind]}
-        </Btn>
+        {section.kind !== 'divider' && (
+          <Btn onClick={() => addItem(section.id)} className="self-start">
+            {ADD_LABEL[section.kind]}
+          </Btn>
+        )}
       </div>
     </details>
   )

@@ -31,9 +31,18 @@ SCHEMA
   "sections": [
     // Use the section type that fits. Repeat types as needed. Order matters.
 
-    // 1. Plain bullet list — summary, skills, soft skills, languages.
+    // 1. Plain bullet list — soft skills, short claim lists.
     { "kind": "bullets", "title": string, "enabled": true,
       "items": [ { "text": string } ] },
+
+    // 1a. Prose — paragraphs, no bullets. Prefer this for the summary/profile.
+    { "kind": "prose", "title": string, "enabled": true,
+      "items": [ { "text": string } ] },
+
+    // 1b. Inline — compact "Label   value, value" rows. Prefer this for skills
+    //     and languages; it fits far more on the page than one bullet each.
+    { "kind": "inline", "title": string, "enabled": true,
+      "items": [ { "label": string, "text": string } ] },
 
     // 2. Timeline — experience, education. Each entry has a two-line heading
     //    (org + location, then role + period) and its own bullets.
@@ -56,8 +65,8 @@ SCHEMA
 }
 
 TYPICAL SECTION ORDER
-Professional Summary (bullets), Education (timeline), Technical Skills (bullets),
+Professional Summary (prose), Education (timeline), Technical Skills (inline),
 Experience (timeline), Projects (projects), Accomplishments (labeled),
-Languages (bullets). Drop any section I do not have.
+Languages (inline). Drop any section I do not have.
 
 Now output the JSON.`

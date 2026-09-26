@@ -81,11 +81,65 @@ function describe(err: unknown): Error {
   return new Error(JSON.stringify(err))
 }
 
-export async function compileSvg(resume: Resume): Promise<string> {
+/** Page-fit telemetry emitted by the template's `<resume-fit>` metadata. */
+export interface PageFit {
+  pages: number
+  /** Height of content on the final page, in points. */
+  usedOnLastPt: number
+  /** Usable height of one page, in points. */
+  usablePt: number
+}
+
+export interface CompiledDoc {
+  svg: string
+  fit: PageFit | null
+}
+
+interface FitMetadata {
+  pages: number
+  lastPage: number
+  usedPt: number
+  pageHeightPt: number
+  topMarginPt: number
+  bottomMarginPt: number
+}
+
+async function readFit(): Promise<PageFit | null> {
+  try {
+    // `$typst.query` snapshots an uncompiled world, so it fails with "document
+    // is not compiled". Drive the world directly instead: compiling it again is
+    // near-free because Typst's incremental cache is still warm from the
+    // vector compile that just ran.
+    const compiler = await $typst.getCompiler()
+    const found = await compiler.runWithWorld({ mainFilePath: MAIN_PATH }, async (world) => {
+      await world.compile()
+      return (await world.query({ selector: '<resume-fit>', field: 'value' })) as FitMetadata[]
+    })
+    const m = found?.[0]
+    if (!m) return null
+    return {
+      pages: m.pages,
+      usedOnLastPt: Math.max(0, m.usedPt - m.topMarginPt),
+      usablePt: m.pageHeightPt - m.topMarginPt - m.bottomMarginPt,
+    }
+  } catch (err) {
+    // Telemetry is optional; never fail a render over it.
+    console.warn('page-fit query failed', err)
+    return null
+  }
+}
+
+export async function compileDocument(resume: Resume): Promise<CompiledDoc> {
   return enqueue(async () => {
     await stage(resume)
     try {
-      return await $typst.svg({ mainFilePath: MAIN_PATH })
+      // One compile serves all three: `vector` compiles and retains the
+      // document, `query` then reads the fit metadata off it for free, and the
+      // SVG is rendered from the artifact rather than compiled a second time.
+      const vector = await $typst.vector({ mainFilePath: MAIN_PATH })
+      const fit = await readFit()
+      const svg = await $typst.svg(vector ? { vectorData: vector } : { mainFilePath: MAIN_PATH })
+      return { svg, fit }
     } catch (err) {
       throw describe(err)
     }

@@ -12,7 +12,8 @@
     "typecheck": "tsc -b",
     "build:cf": "tsc -b && vite build --mode cloudflare",
     "deploy": "pnpm build:cf && pnpm dlx wrangler deploy",
-    "preview:cf": "pnpm build:cf && vite preview --port 5178 --strictPort"
+    "preview:cf": "pnpm build:cf && vite preview --port 5178 --strictPort",
+    "gen:preview": "node scripts/gen-preview.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

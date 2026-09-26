@@ -1,9 +1,16 @@
-import { useCompiledSvg } from '../lib/hooks'
-import type { Resume } from '../types'
-
-export function Preview({ resume, zoom }: { resume: Resume; zoom: number }) {
-  const { data, error, isFetching, isPending } = useCompiledSvg(resume)
-
+export function Preview({
+  svg,
+  error,
+  isFetching,
+  isPending,
+  zoom,
+}: {
+  svg: string | undefined
+  error: Error | null
+  isFetching: boolean
+  isPending: boolean
+  zoom: number
+}) {
   return (
     <div className="relative h-full overflow-auto bg-canvas p-6">
       {isFetching && (
@@ -20,16 +27,14 @@ export function Preview({ resume, zoom }: { resume: Resume; zoom: number }) {
         </pre>
       )}
 
-      {isPending && !data && (
-        <p className="py-20 text-center text-sm text-dim">Loading Typst compiler…</p>
-      )}
+      {isPending && !svg && <p className="py-20 text-center text-sm text-dim">Loading Typst compiler…</p>}
 
-      {data && (
+      {svg && (
         <div
           className="paper mx-auto w-fit origin-top drop-shadow-[0_6px_28px_rgba(0,0,0,0.45)] transition-transform [&_svg]:block [&_svg]:h-auto [&_svg]:max-w-none"
           style={{ transform: `scale(${zoom})` }}
           // Output of the Typst renderer; regenerated on every compile.
-          dangerouslySetInnerHTML={{ __html: data }}
+          dangerouslySetInnerHTML={{ __html: svg }}
         />
       )}
     </div>

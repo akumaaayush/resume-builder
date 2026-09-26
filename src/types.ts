@@ -49,6 +49,15 @@ export interface SimpleItem {
   text: string
 }
 
+/** Compact `Label   value · value` row. */
+export interface InlineItem {
+  id: string
+  label: string
+  text: string
+}
+
+export type DividerVariant = 'page' | 'rule' | 'space'
+
 interface SectionBase {
   id: string
   title: string
@@ -57,9 +66,12 @@ interface SectionBase {
 
 export type Section =
   | (SectionBase & { kind: 'bullets'; items: SimpleItem[] })
+  | (SectionBase & { kind: 'prose'; items: SimpleItem[] })
+  | (SectionBase & { kind: 'inline'; items: InlineItem[] })
   | (SectionBase & { kind: 'timeline'; entries: TimelineEntry[] })
   | (SectionBase & { kind: 'projects'; items: ProjectItem[] })
   | (SectionBase & { kind: 'labeled'; items: LabeledItem[] })
+  | (SectionBase & { kind: 'divider'; variant: DividerVariant })
 
 export type SectionKind = Section['kind']
 

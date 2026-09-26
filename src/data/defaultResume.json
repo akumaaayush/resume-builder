@@ -1,6 +1,11 @@
 {
   "config": {
-    "margin": { "top": 0.5, "right": 0.375, "bottom": 0.5, "left": 0.625 },
+    "margin": {
+      "top": 0.5,
+      "right": 0.375,
+      "bottom": 0.5,
+      "left": 0.625
+    },
     "fontSize": 10,
     "itemSize": 9,
     "font": "New Computer Modern",
@@ -17,43 +22,67 @@
     "phone": "+1 (555) 012-3456",
     "location": "San Francisco, CA",
     "profiles": [
-      { "label": "LinkedIn", "url": "https://www.linkedin.com/in/yourhandle" },
-      { "label": "GitHub", "url": "https://github.com/yourhandle" },
-      { "label": "Portfolio", "url": "https://yourdomain.com" }
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/yourhandle"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/yourhandle"
+      },
+      {
+        "label": "Portfolio",
+        "url": "https://yourdomain.com"
+      }
     ]
   },
   "sections": [
     {
-      "kind": "bullets",
+      "kind": "prose",
       "title": "Professional Summary",
       "enabled": true,
       "items": [
         {
-          "text": "Software Engineer with 5+ years building and operating production web services, most recently in logistics and payments."
+          "text": "Software Engineer with 5+ years building and operating production web services, most recently in logistics and payments. Focused on backend systems: API design, relational data modelling, and keeping p95 latency predictable as traffic grows."
         },
         {
-          "text": "Focused on backend systems: API design, relational data modelling, and keeping p95 latency predictable as traffic grows."
-        },
-        {
-          "text": "Comfortable owning a feature end to end, from schema and API through frontend integration, deployment, and on-call."
-        },
-        {
-          "text": "Enjoys mentoring, writing things down, and leaving systems easier to change than they were found."
+          "text": "Comfortable owning a feature end to end — schema and API through frontend integration, deployment, and on-call — and happiest leaving systems easier to change than they were found."
         }
       ]
     },
     {
-      "kind": "bullets",
+      "kind": "inline",
       "title": "Technical Skills",
       "enabled": true,
       "items": [
-        { "text": "Languages: TypeScript, Python, Go, SQL" },
-        { "text": "Backend: Node.js, Express, NestJS, FastAPI, REST, GraphQL, gRPC" },
-        { "text": "Frontend: React, Next.js, Vue, Tailwind CSS, Vitest, Playwright" },
-        { "text": "Data: PostgreSQL, MySQL, MongoDB, Redis, Elasticsearch, Prisma, Kafka" },
-        { "text": "Infrastructure: Docker, Kubernetes, Terraform, AWS (EC2, ECS, RDS, S3, Lambda)" },
-        { "text": "Delivery: GitHub Actions, GitLab CI, Jenkins, blue/green and canary deploys" },
-        { "text": "Observability: OpenTelemetry, Grafana, Prometheus, Datadog, Sentry" }
+        {
+          "label": "Languages",
+          "text": "TypeScript, Python, Go, SQL"
+        },
+        {
+          "label": "Backend",
+          "text": "Node.js, Express, NestJS, FastAPI, REST, GraphQL, gRPC"
+        },
+        {
+          "label": "Frontend",
+          "text": "React, Next.js, Vue, Tailwind CSS, Vitest, Playwright"
+        },
+        {
+          "label": "Data",
+          "text": "PostgreSQL, MySQL, MongoDB, Redis, Elasticsearch, Prisma, Kafka"
+        },
+        {
+          "label": "Infrastructure",
+          "text": "Docker, Kubernetes, Terraform, AWS (EC2, ECS, RDS, S3, Lambda)"
+        },
+        {
+          "label": "Delivery",
+          "text": "GitHub Actions, GitLab CI, Jenkins, blue/green and canary deploys"
+        },
+        {
+          "label": "Observability",
+          "text": "OpenTelemetry, Grafana, Prometheus, Datadog, Sentry"
+        }
       ]
     },
     {
@@ -200,13 +229,22 @@
       ]
     },
     {
-      "kind": "bullets",
+      "kind": "inline",
       "title": "Languages",
       "enabled": true,
       "items": [
-        { "text": "English (Native)" },
-        { "text": "Spanish (Professional)" },
-        { "text": "German (Conversational)" }
+        {
+          "label": "English",
+          "text": "Native"
+        },
+        {
+          "label": "Spanish",
+          "text": "Professional"
+        },
+        {
+          "label": "German",
+          "text": "Conversational"
+        }
       ]
     }
   ]

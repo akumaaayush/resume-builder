@@ -1,5 +1,5 @@
 import { defaultConfig } from '../data/defaultConfig'
-import type { Resume, Section, SectionKind } from '../types'
+import type { DividerVariant, Resume, Section, SectionKind } from '../types'
 
 /**
  * Tolerant parser for documents that did not come out of this app — typically
@@ -15,7 +15,17 @@ const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : [])
 const obj = (v: unknown): Record<string, unknown> =>
   typeof v === 'object' && v !== null ? (v as Record<string, unknown>) : {}
 
-const KINDS: SectionKind[] = ['bullets', 'timeline', 'projects', 'labeled']
+const KINDS: SectionKind[] = [
+  'bullets',
+  'prose',
+  'inline',
+  'timeline',
+  'projects',
+  'labeled',
+  'divider',
+]
+
+const DIVIDERS: DividerVariant[] = ['page', 'rule', 'space']
 
 export function normalizeResume(input: unknown): Resume {
   const root = obj(input)
@@ -73,10 +83,28 @@ function normalizeSection(raw: unknown): Section | null {
 
   switch (kind) {
     case 'bullets':
+    case 'prose':
       return {
         ...base,
         kind,
         items: arr(s.items).map((i) => ({ id: uid(), text: str(obj(i).text, textOf(i)) })),
+      }
+    case 'inline':
+      return {
+        ...base,
+        kind,
+        items: arr(s.items).map((i) => {
+          const o = obj(i)
+          return { id: uid(), label: str(o.label), text: str(o.text, textOf(i)) }
+        }),
+      }
+    case 'divider':
+      return {
+        ...base,
+        kind,
+        variant: DIVIDERS.includes(s.variant as DividerVariant)
+          ? (s.variant as DividerVariant)
+          : 'space',
       }
     case 'labeled':
       return {

@@ -5,8 +5,10 @@ import { fsSupported } from '../lib/fileSystem'
 import { fileStore, linkNewFile, openFile, save, unlink } from '../store/file'
 import { historyStore, redo, replaceResume, resetResume, undo } from '../store/resume'
 import { themeStore, toggleTheme } from '../store/theme'
+import type { PageFit as Fit } from '../typst/engine'
 import type { Resume } from '../types'
 import { Logo } from './Logo'
+import { PageFit } from './PageFit'
 import { Btn } from './ui'
 
 export function Toolbar({
@@ -14,11 +16,17 @@ export function Toolbar({
   zoom,
   setZoom,
   onStartFromCv,
+  onHome,
+  fit,
+  fitStale,
 }: {
   resume: Resume
   zoom: number
   setZoom: (z: number) => void
   onStartFromCv: () => void
+  onHome: () => void
+  fit: Fit | null | undefined
+  fitStale: boolean
 }) {
   const { canUndo, canRedo } = useStore(historyStore)
   const file = useStore(fileStore)
@@ -51,10 +59,15 @@ export function Toolbar({
 
   return (
     <header className="flex flex-wrap items-center gap-2 border-b border-line bg-surface px-4 py-2.5">
-      <h1 className="mr-1 flex items-center gap-2 text-sm font-semibold tracking-tight text-ink">
+      <button
+        type="button"
+        onClick={onHome}
+        data-tip="Back to home"
+        className="mr-1 flex items-center gap-2 rounded-md text-sm font-semibold tracking-tight text-ink transition hover:opacity-80"
+      >
         <Logo className="h-[22px] w-[22px] rounded-[5px]" />
         Résumé<span className="font-normal text-faint">· typst</span>
-      </h1>
+      </button>
 
       <Btn onClick={undo} disabled={!canUndo} data-tip="Undo (Ctrl+Z)">
         ↶
@@ -117,6 +130,7 @@ export function Toolbar({
       </div>
 
       <div className="ml-auto flex items-center gap-2">
+        <PageFit fit={fit} stale={fitStale} />
         {(error ?? file.error) && (
           <span className="max-w-xs truncate text-xs text-danger">{error ?? file.error}</span>
         )}

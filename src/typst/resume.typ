@@ -151,15 +151,61 @@
   }
 })
 
+// Paragraphs rather than bullets: opening profile, closing note.
+#let prose-block(items) = {
+  for (i, it) in items.enumerate() {
+    if it.text == "" { continue }
+    if i > 0 { v(pt(2)) }
+    par(it.text)
+  }
+}
+
+// Compact `Label   value · value` rows. Labels share one column so they line
+// up, and long value runs wrap under themselves instead of under the label.
+#let inline-block(items) = {
+  let rows = items.filter(it => it.label != "" or it.text != "")
+  if rows.len() == 0 { return }
+  grid(
+    columns: (auto, 1fr),
+    column-gutter: 0.9em,
+    row-gutter: 0.45em,
+    ..rows
+      .map(it => (small(strong(it.label)), small(it.text)))
+      .flatten()
+  )
+}
+
+#let divider-block(variant) = {
+  if variant == "page" {
+    pagebreak(weak: true)
+  } else if variant == "rule" {
+    v(pt(2))
+    line(length: 100%, stroke: 0.4pt + luma(60%))
+    v(pt(2))
+  } else {
+    v(pt(cfg.blockSpacing * 2))
+  }
+}
+
 #header-block(header)
 
 #for s in doc.sections {
   if not s.enabled { continue }
 
+  // Dividers carry no heading; everything else opens with its section rule.
+  if s.kind == "divider" {
+    divider-block(s.at("variant", default: "space"))
+    continue
+  }
+
   section(s.title)
 
   if s.kind == "bullets" {
     bullet-list(s.items)
+  } else if s.kind == "prose" {
+    prose-block(s.items)
+  } else if s.kind == "inline" {
+    inline-block(s.items)
   } else if s.kind == "timeline" {
     for e in s.entries { timeline-entry(e) }
   } else if s.kind == "projects" {
@@ -174,3 +220,16 @@
     )
   }
 }
+
+// Page-fit telemetry for the editor: total pages, and how far down the final
+// page the content reaches. Queried by the app, invisible in the output.
+#context [
+  #metadata((
+    pages: counter(page).final().first(),
+    lastPage: here().page(),
+    usedPt: here().position().y.pt(),
+    pageHeightPt: page.height.pt(),
+    topMarginPt: (cfg.margin.top * 1in).pt(),
+    bottomMarginPt: (cfg.margin.bottom * 1in).pt(),
+  ))<resume-fit>
+]
