@@ -80,7 +80,7 @@ export function ImportDialog({ onClose }: { onClose: () => void }) {
             value={pasted}
             placeholder={'{\n  "header": { ... },\n  "sections": [ ... ]\n}'}
             onChange={(e) => setPasted(e.target.value)}
-            className="font-mono text-xs"
+            className="font-mono text-xs!"
           />
         </div>
 

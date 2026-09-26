@@ -9,6 +9,10 @@ export function Field({ label, children }: { label: string; children: ReactNode 
   )
 }
 
+// Caller classes are appended, but class-attribute order does not settle
+// Tailwind conflicts -- whichever utility sits later in the generated
+// stylesheet wins. To override a utility below (width, text size), put it on a
+// wrapper element or use the `!` important suffix.
 const inputClass =
   'w-full rounded-md border border-line bg-raised px-2 py-1.5 text-sm text-ink outline-none transition placeholder:text-faint hover:border-line-strong focus:border-accent focus:ring-2 focus:ring-accent/25'
 

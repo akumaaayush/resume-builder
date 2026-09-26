@@ -9,6 +9,7 @@ import type { PageFit as Fit } from '../typst/engine'
 import type { Resume } from '../types'
 import { Logo } from './Logo'
 import { PageFit } from './PageFit'
+import { ProfileSwitch } from './ProfileSwitch'
 import { Btn } from './ui'
 
 export function Toolbar({
@@ -102,6 +103,7 @@ export function Toolbar({
 
       <span className="mx-1 h-4 w-px bg-line" />
 
+      <ProfileSwitch />
       <Btn onClick={onStartFromCv}>✦ From existing CV</Btn>
       <Btn onClick={importJson}>Import JSON</Btn>
       <Btn onClick={() => downloadJson(resume)}>Export JSON</Btn>

@@ -136,12 +136,17 @@ export function SectionEditor({ section, dragHandle }: { section: Section; dragH
                     <div className="flex items-start gap-1">
                       <span className="pt-1.5">{handle}</span>
                       <div className="flex min-w-0 flex-1 gap-2">
-                        <TextInput
-                          value={item.label}
-                          placeholder="Label"
-                          className="w-32 shrink-0"
-                          onChange={(e) => updateItem(section.id, item.id, { label: e.target.value })}
-                        />
+                        {/* Width lives on the wrapper: the input's own `w-full`
+                            would win a class-order fight against `w-32`. */}
+                        <div className="w-32 shrink-0">
+                          <TextInput
+                            value={item.label}
+                            placeholder="Label"
+                            onChange={(e) =>
+                              updateItem(section.id, item.id, { label: e.target.value })
+                            }
+                          />
+                        </div>
                         <TextInput
                           value={item.text}
                           placeholder="TypeScript, Go, SQL"

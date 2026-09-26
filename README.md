@@ -91,6 +91,17 @@ edit cycle, measured in-browser).
 | `Ctrl+S` | Save to the linked file |
 | `Ctrl+Z` / `Ctrl+Shift+Z` | Undo / redo |
 
+## Switching documents while developing
+
+Any `examples/*.json` shows up in a **dev-only** dropdown in the toolbar, next
+to a "Starter" entry — handy for flipping between the shipped starter and a real
+résumé. `examples/*.local.json` is gitignored, so personal copies stay out of
+the repo.
+
+The files are listed by a Vite middleware marked `apply: 'serve'`
+(`localProfiles` in `vite.config.ts`), so they are never bundled: a production
+`dist/` contains no trace of them, and the dropdown does not render.
+
 ## Landing page
 
 `/` is a single-viewport landing page and `/edit` is the editor. Two routes did
