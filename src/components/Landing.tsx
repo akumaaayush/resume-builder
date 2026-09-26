@@ -2,7 +2,7 @@ import { useStore } from '@tanstack/react-store'
 import { themeStore, toggleTheme } from '../store/theme'
 import { Logo } from './Logo'
 
-const REPO_URL = 'https://github.com/akumaaayush/resume-builder'
+// const REPO_URL = 'https://github.com/akumaaayush/resume-builder'
 
 const POINTS = [
   'Real Typst typesetting in Computer Modern, the LaTeX look as a real PDF.',
