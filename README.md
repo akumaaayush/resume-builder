@@ -62,7 +62,7 @@ browser-cached; compiles after that are ~100 ms for this document.
 | `prose` | Paragraphs, no bullets. Use for the opening summary |
 | `bullets` | Plain bullet list |
 | `inline` | Compact `Label   value, value` rows on one aligned grid. Fits far more than a bullet each, so it is the right shape for skills and languages |
-| `timeline` | Org + location, role + period, then bullets. Experience and education |
+| `timeline` | Org + location, role + period, then bullets. Experience and education. Each bullet can carry nested detail lines, rendered with the LaTeX level-two `∘` marker |
 | `projects` | Name with optional repo/live icons, summary, stack |
 | `labeled` | Bold label, text, trailing meta. Awards, certifications, publications |
 | `divider` | `page` forces a page break, `rule` draws a line, `space` adds a gap. No heading |
@@ -74,6 +74,14 @@ example row. Blank kinds are at the bottom of the list.
 
 Multi-column layouts are deliberately absent: ATS parsers read them badly and
 can scramble the order of your experience.
+
+### Section JSON
+
+The `{ }` button on a section header opens its JSON: copy it, or paste JSON in
+to replace that section in place. Ids are stripped on the way out and minted
+fresh on the way in, so a section can move between documents without collisions.
+Handy for keeping two versions of an Experience block, or lifting one section
+from an old résumé.
 
 ### Page fit
 

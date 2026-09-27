@@ -13,6 +13,8 @@ export interface Bullet {
   /** Bold lead-in, e.g. "API Development". Optional. */
   label: string
   text: string
+  /** Nested detail lines, rendered with the LaTeX level-two marker. */
+  children: SimpleItem[]
 }
 
 /** Education / experience entry: two lines, each with a right-aligned column. */
@@ -103,6 +105,8 @@ export interface DocConfig {
   leading: number
   /** Bullet marker glyph. */
   marker: string
+  /** Put bullet body text on its own line, under the bold lead-in. */
+  stackBulletLabels: boolean
 }
 
 export interface Resume {

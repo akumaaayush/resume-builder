@@ -12,6 +12,18 @@ import { useCompiledDoc, useDebounced } from './lib/hooks'
 import { restoreLink, save } from './store/file'
 import { redo, reorderSections, resumeStore, undo } from './store/resume'
 
+const ZOOM_KEY = 'resume-builder:zoom'
+
+function initialZoom(): number {
+  try {
+    const saved = Number(localStorage.getItem(ZOOM_KEY))
+    if (saved >= 0.25 && saved <= 2) return saved
+  } catch {
+    // Private mode or blocked storage: fall through to the default.
+  }
+  return 0.9
+}
+
 export default function App({ onHome }: { onHome: () => void }) {
   const resume = useStore(resumeStore)
   // Typst compiles this document in ~100ms, but debouncing keeps typing smooth
@@ -19,7 +31,7 @@ export default function App({ onHome }: { onHome: () => void }) {
   const debounced = useDebounced(resume, 300)
   const { data, error, isFetching, isPending } = useCompiledDoc(debounced)
 
-  const [zoom, setZoom] = useState(0.9)
+  const [zoom, setZoom] = useState(initialZoom)
   const [splitPct, setSplitPct] = useState(42)
   const [importing, setImporting] = useState(false)
   const dragging = useRef(false)
@@ -27,6 +39,14 @@ export default function App({ onHome }: { onHome: () => void }) {
   useEffect(() => {
     void restoreLink()
   }, [])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(ZOOM_KEY, String(zoom))
+    } catch {
+      // Not worth surfacing: the zoom simply resets next session.
+    }
+  }, [zoom])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {

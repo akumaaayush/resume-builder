@@ -1,21 +1,26 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import {
   addBullet,
+  addChild,
   addItem,
   removeBullet,
+  removeChild,
   removeEntry,
   removeItem,
   removeSection,
   renameSection,
   reorderBullets,
+  reorderChildren,
   reorderInSection,
   setDividerVariant,
   toggleSection,
   updateBullet,
+  updateChild,
   updateEntry,
   updateItem,
 } from '../store/resume'
-import type { DividerVariant, Section, TimelineEntry } from '../types'
+import type { Bullet, DividerVariant, Section, TimelineEntry } from '../types'
+import { SectionJsonDialog } from './SectionJsonDialog'
 import { SortableList, SortableRow } from './Sortable'
 import { Btn, Field, RowTools, TextArea, TextInput } from './ui'
 
@@ -52,6 +57,8 @@ function rowIds(section: Section): string[] {
 }
 
 export function SectionEditor({ section, dragHandle }: { section: Section; dragHandle: ReactNode }) {
+  const [showJson, setShowJson] = useState(false)
+
   return (
     <details open className="group rounded-lg border border-line bg-surface open:shadow-sm">
       <summary className="flex cursor-pointer list-none items-center gap-1 rounded-lg px-2 py-2.5 hover:bg-ink/5">
@@ -83,7 +90,15 @@ export function SectionEditor({ section, dragHandle }: { section: Section; dragH
           on
         </label>
 
-        <div onClick={(e) => e.preventDefault()}>
+        <div onClick={(e) => e.preventDefault()} className="flex items-center gap-0.5">
+          <Btn
+            variant="subtle"
+            onClick={() => setShowJson(true)}
+            data-tip="Copy or replace as JSON"
+            aria-label="Section JSON"
+          >
+            {'{ }'}
+          </Btn>
           <RowTools onRemove={() => removeSection(section.id)} />
         </div>
       </summary>
@@ -294,6 +309,7 @@ export function SectionEditor({ section, dragHandle }: { section: Section; dragH
           </Btn>
         )}
       </div>
+      {showJson && <SectionJsonDialog section={section} onClose={() => setShowJson(false)} />}
     </details>
   )
 }
@@ -373,6 +389,7 @@ function EntryEditor({
                         value={b.text}
                         onChange={(e) => updateBullet(sectionId, entry.id, b.id, { text: e.target.value })}
                       />
+                      <ChildEditor sectionId={sectionId} entryId={entry.id} bullet={b} />
                     </div>
                     <RowTools
                       onInsert={() => addBullet(sectionId, entry.id, i + 1)}
@@ -389,6 +406,60 @@ function EntryEditor({
           + Bullet
         </Btn>
       </div>
+    </div>
+  )
+}
+
+/** Detail lines nested under one bullet, rendered with the level-two marker. */
+function ChildEditor({
+  sectionId,
+  entryId,
+  bullet,
+}: {
+  sectionId: string
+  entryId: string
+  bullet: Bullet
+}) {
+  const children = bullet.children ?? []
+
+  return (
+    <div className="ml-3 flex flex-col gap-1.5 border-l border-line pl-2.5">
+      <SortableList
+        ids={children.map((c) => c.id)}
+        onReorder={(from, to) => reorderChildren(sectionId, entryId, bullet.id, from, to)}
+      >
+        <div className="flex flex-col gap-1.5">
+          {children.map((child, i) => (
+            <SortableRow key={child.id} id={child.id}>
+              {(handle) => (
+                <div className="flex items-start gap-1">
+                  <span className="pt-1.5">{handle}</span>
+                  <TextArea
+                    rows={2}
+                    value={child.text}
+                    placeholder="Detail line"
+                    onChange={(e) =>
+                      updateChild(sectionId, entryId, bullet.id, child.id, e.target.value)
+                    }
+                  />
+                  <RowTools
+                    onInsert={() => addChild(sectionId, entryId, bullet.id, i + 1)}
+                    onRemove={() => removeChild(sectionId, entryId, bullet.id, child.id)}
+                  />
+                </div>
+              )}
+            </SortableRow>
+          ))}
+        </div>
+      </SortableList>
+
+      <Btn
+        variant="subtle"
+        className="self-start"
+        onClick={() => addChild(sectionId, entryId, bullet.id)}
+      >
+        + Detail line
+      </Btn>
     </div>
   )
 }

@@ -183,6 +183,11 @@ export function insertSection(section: Section, at?: number) {
   commit((doc) => ({ ...doc, sections: insert(doc.sections, section, at) }))
 }
 
+/** Swap one section for another, keeping its position. */
+export function replaceSection(id: string, next: Section) {
+  commit((doc) => mapSection(doc, id, () => next))
+}
+
 export function removeSection(id: string) {
   commit((doc) => ({ ...doc, sections: doc.sections.filter((s) => s.id !== id) }))
 }
@@ -296,7 +301,7 @@ function mapBullets(
 export function addBullet(sectionId: string, entryId: string, at?: number) {
   commit((doc) =>
     mapSection(doc, sectionId, (s) =>
-      mapBullets(s, entryId, (bullets) => insert(bullets, { id: uid(), label: '', text: '' }, at)),
+      mapBullets(s, entryId, (bullets) => insert(bullets, { id: uid(), label: '', text: '', children: [] }, at)),
     ),
   )
 }
@@ -320,6 +325,65 @@ export function removeBullet(sectionId: string, entryId: string, bulletId: strin
   commit((doc) =>
     mapSection(doc, sectionId, (s) =>
       mapBullets(s, entryId, (bullets) => bullets.filter((b) => b.id !== bulletId)),
+    ),
+  )
+}
+
+// --- sub-bullets ----------------------------------------------------------
+
+function mapChildren(
+  s: Section,
+  entryId: string,
+  bulletId: string,
+  fn: (children: SimpleItem[]) => SimpleItem[],
+): Section {
+  return mapBullets(s, entryId, (bullets) =>
+    bullets.map((b) => (b.id === bulletId ? { ...b, children: fn(b.children ?? []) } : b)),
+  )
+}
+
+export function addChild(sectionId: string, entryId: string, bulletId: string, at?: number) {
+  commit((doc) =>
+    mapSection(doc, sectionId, (s) =>
+      mapChildren(s, entryId, bulletId, (kids) => insert(kids, { id: uid(), text: '' }, at)),
+    ),
+  )
+}
+
+export function updateChild(
+  sectionId: string,
+  entryId: string,
+  bulletId: string,
+  childId: string,
+  text: string,
+) {
+  commit((doc) =>
+    mapSection(doc, sectionId, (s) =>
+      mapChildren(s, entryId, bulletId, (kids) =>
+        kids.map((k) => (k.id === childId ? { ...k, text } : k)),
+      ),
+    ),
+  )
+}
+
+export function removeChild(sectionId: string, entryId: string, bulletId: string, childId: string) {
+  commit((doc) =>
+    mapSection(doc, sectionId, (s) =>
+      mapChildren(s, entryId, bulletId, (kids) => kids.filter((k) => k.id !== childId)),
+    ),
+  )
+}
+
+export function reorderChildren(
+  sectionId: string,
+  entryId: string,
+  bulletId: string,
+  from: number,
+  to: number,
+) {
+  commit((doc) =>
+    mapSection(doc, sectionId, (s) =>
+      mapChildren(s, entryId, bulletId, (kids) => arrayMove(kids, from, to)),
     ),
   )
 }

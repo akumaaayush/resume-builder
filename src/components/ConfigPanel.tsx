@@ -102,6 +102,21 @@ export function ConfigPanel({ config }: { config: DocConfig }) {
             />
           </Field>
         </div>
+
+        <label className="flex cursor-pointer items-start gap-2 text-xs text-dim">
+          <input
+            type="checkbox"
+            checked={config.stackBulletLabels}
+            onChange={(e) => updateConfig({ stackBulletLabels: e.target.checked })}
+            className="mt-0.5 accent-ink"
+          />
+          <span>
+            Bullet text on its own line
+            <span className="block text-[10px] text-faint">
+              Reads cleaner, but costs roughly one line per bullet.
+            </span>
+          </span>
+        </label>
       </div>
     </section>
   )

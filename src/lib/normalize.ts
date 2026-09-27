@@ -54,6 +54,10 @@ export function normalizeResume(input: unknown): Resume {
       blockSpacing: num(config.blockSpacing, d.blockSpacing),
       leading: num(config.leading, d.leading),
       marker: str(config.marker, d.marker),
+      stackBulletLabels:
+        config.stackBulletLabels === undefined
+          ? d.stackBulletLabels
+          : Boolean(config.stackBulletLabels),
     },
     header: {
       name: str(header.name),
@@ -70,7 +74,8 @@ export function normalizeResume(input: unknown): Resume {
   }
 }
 
-function normalizeSection(raw: unknown): Section | null {
+/** Normalises one section; used by the per-section JSON import. */
+export function normalizeSection(raw: unknown): Section | null {
   const s = obj(raw)
   const kind = KINDS.includes(s.kind as SectionKind) ? (s.kind as SectionKind) : null
   if (!kind) return null
@@ -145,7 +150,15 @@ function normalizeSection(raw: unknown): Section | null {
             period: str(o.period),
             bullets: arr(o.bullets).map((b) => {
               const bo = obj(b)
-              return { id: uid(), label: str(bo.label), text: str(bo.text, textOf(b)) }
+              return {
+                id: uid(),
+                label: str(bo.label),
+                text: str(bo.text, textOf(b)),
+                children: arr(bo.children).map((c) => ({
+                  id: uid(),
+                  text: str(obj(c).text, textOf(c)),
+                })),
+              }
             }),
           }
         }),

@@ -1,0 +1,411 @@
+{
+  "config": {
+    "margin": {
+      "top": 0.5,
+      "right": 0.375,
+      "bottom": 0.5,
+      "left": 0.625
+    },
+    "fontSize": 10,
+    "itemSize": 9,
+    "font": "New Computer Modern",
+    "nameSize": 14.4,
+    "headingSize": 12,
+    "blockSpacing": 4,
+    "leading": 0.6,
+    "marker": "•",
+    "stackBulletLabels": false
+  },
+  "header": {
+    "name": "Aayush Shah",
+    "nameUrl": "https://www.linkedin.com/in/akumaaayush/",
+    "email": "shahaayush999@gmail.com",
+    "phone": "+977-9819353534",
+    "location": "Kathmandu, Nepal",
+    "profiles": [
+      {
+        "id": "7b306094",
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/akumaaayush/"
+      },
+      {
+        "id": "cbd5d3a8",
+        "label": "Github",
+        "url": "https://github.com/akumaaayush/"
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "1bd8cc8f",
+      "title": "Professional Summary",
+      "enabled": true,
+      "kind": "bullets",
+      "items": [
+        {
+          "id": "dd88fbfe",
+          "text": "Software Engineer with 2+ years of experience building highly tailored ERP systems using Node.js, Vue.js, and PostgreSQL."
+        },
+        {
+          "id": "170beadd",
+          "text": "Specialized in developing scalable backend services with optimized SQL queries."
+        },
+        {
+          "id": "68156482",
+          "text": "Experienced in translating requirements to development and deployment."
+        },
+        {
+          "id": "f50c425b",
+          "text": "Passionate about building efficient, scalable, secure systems with modern technologies."
+        }
+      ]
+    },
+    {
+      "id": "f6450612",
+      "title": "Education",
+      "enabled": true,
+      "kind": "timeline",
+      "entries": [
+        {
+          "id": "eff5388a",
+          "org": "Amrit Science Campus",
+          "location": "Thamel, Kathmandu",
+          "role": "Affl. Tribhuvan University; BSc. Computer Science and Information Technology; (Running)",
+          "period": "2019 - 2024",
+          "bullets": []
+        },
+        {
+          "id": "c9d48757",
+          "org": "Eureka Higher Secondary School",
+          "location": "Dharan, Nepal",
+          "role": "Computer Science; National Examinations Board); GPA: 3.61",
+          "period": "2016 - 2018",
+          "bullets": []
+        }
+      ]
+    },
+    {
+      "id": "77a660b5",
+      "title": "Technical Skills",
+      "enabled": true,
+      "kind": "inline",
+      "items": [
+        {
+          "id": "fb36b333",
+          "label": "Languages",
+          "text": "JavaScript, TypeScript, Bash Scripting"
+        },
+        {
+          "id": "9cb09e33",
+          "label": "Backend",
+          "text": "Express, NestJS, FastAPI, "
+        },
+        {
+          "id": "fdffb1ba",
+          "label": "",
+          "text": "REST API, GraphQL, Socket, SSE"
+        },
+        {
+          "id": "aac96261",
+          "label": "Frontend",
+          "text": "React, Vue, Nuxt, NextJS, SASS, Tailwind CSS"
+        },
+        {
+          "id": "56e04468",
+          "label": "Infrastructure",
+          "text": "Self-Hosted Server Management, Amazon EC2, S3, MinIO"
+        },
+        {
+          "id": "b11073a2",
+          "label": "Database",
+          "text": "Database (PostgreSQL, MongoDB, Redis, Firestore), Raw SQL, Prisma, TypeORM"
+        },
+        {
+          "id": "15532f4d",
+          "label": "Logging",
+          "text": "Logging (ElasticSearch, Kibana, Logstash (ELK Stack), Sentry)"
+        },
+        {
+          "id": "9d09bffa",
+          "label": "API Tools",
+          "text": "Postman, Insomnia, Swagger"
+        },
+        {
+          "id": "fb1e1a4f",
+          "label": "Tools",
+          "text": "Git/Github, VSCode, IntelliJ IDEA, Jira"
+        },
+        {
+          "id": "14883d2a",
+          "label": "DevOps",
+          "text": "Docker, Github Actions, Linux, Server Administration"
+        }
+      ]
+    },
+    {
+      "id": "6f0f624e",
+      "title": "Experience",
+      "enabled": true,
+      "kind": "timeline",
+      "entries": [
+        {
+          "id": "02fb75d4",
+          "org": "Astra Softech Pvt. Ltd. (Golyan Group)",
+          "location": "Kathmandu, Nepal",
+          "role": "Software Engineer",
+          "period": "August 2024 - Present",
+          "bullets": [
+            {
+              "id": "9226d385",
+              "label": "API Development",
+              "text": "Designed and maintained RESTful APIs to support ERP and e-commerce workflows, ensuring reliable communication between frontend and backend systems.",
+              "children": []
+            },
+            {
+              "id": "4ff2c6e7",
+              "label": "E-commerce Integration",
+              "text": "Designed and Developed schemas and APIs for an E-commerce Content Management System (CMS) directly linked with the manufacturing ERP. Features include CMS, product auto locking/unlocking mechanism, warehouse inventory management, tracking and so on.",
+              "children": []
+            },
+            {
+              "id": "783f2147",
+              "label": "AI Image Studio",
+              "text": "Built the backend for an on-model product imagery studio (NestJS, PostgreSQL, pg-boss) that renders each camera view through an image-generation provider, and contributed to the React operator UI.",
+              "children": [
+                {
+                  "id": "03396e51",
+                  "text": "Used pg-boss as an in-database job queue so a job enqueue commits in the same transaction as the rows it references, removing dual-write inconsistency without adding Redis; implemented its Db adapter over pg-promise."
+                }
+              ]
+            },
+            {
+              "id": "7744cf95",
+              "label": "Microservices Architecture",
+              "text": "Designed and developed modular backend services by decomposing monolithic ERP components into independently deployable microservices, improving maintainability and scalability of the system.",
+              "children": []
+            },
+            {
+              "id": "551fbd1d",
+              "label": "Performance Optimization",
+              "text": "Wrote and optimized complex SQL queries (CTEs, joins, aggregations, schema designs) for reporting and transactional workflows; improved report execution performance by proper analysis and implementation.",
+              "children": []
+            },
+            {
+              "id": "b1b4088f",
+              "label": "Video Library",
+              "text": "Developed and maintained APIs for a video library system to store and view ERP's process and guides used by workers in the factory. Used and maintained self-hosted Min.IO (Amazon s3 equivalent) for securely storing and retrieving videos and images.",
+              "children": []
+            },
+            {
+              "id": "ee4d99a6",
+              "label": "CI/CD & Containerization",
+              "text": "Worked with Docker-based environments and CI/CD pipelines (GitHub Actions) to automate build, testing, and deployment workflows, ensuring consistent and reliable releases.",
+              "children": []
+            },
+            {
+              "id": "5de848fb",
+              "label": "Deployment Automation Dashboard",
+              "text": "Designed and implemented an internal deployment dashboard to automate microservice deployments and track service health, eliminating manual deployment steps and improving release speed, consistency, and operational reliability.",
+              "children": []
+            },
+            {
+              "id": "38c6f0be",
+              "label": "Workflow Automation (n8n)",
+              "text": "Implemented event-driven and scheduled workflows using n8n to automate email and messaging services for critical ERP events (order status changes, approvals, alerts). Integrated workflows with backend APIs and PostgreSQL triggers, ensuring reliable, timely notifications while reducing manual overhead and improving operational efficiency.",
+              "children": []
+            },
+            {
+              "id": "e116cf0d",
+              "label": "Database",
+              "text": "Designed database schema and Optimized database queries for PostgreSQL, massively improving report generation.",
+              "children": []
+            },
+            {
+              "id": "c4f6d83b",
+              "label": "Reports",
+              "text": "Developed APIs for reports generation and graphs using highly optimized queries.",
+              "children": []
+            },
+            {
+              "id": "cbaa667b",
+              "label": "Caching Strategy",
+              "text": "Integrated Redis caching for frequently accessed reporting and operational data, reducing database load and improving API response times.",
+              "children": []
+            },
+            {
+              "id": "92047dcf",
+              "label": "Observability & Monitoring",
+              "text": "Integrated Sentry and logging for real-time error tracking and performance monitoring; improved system visibility and reduced debugging time.",
+              "children": []
+            },
+            {
+              "id": "e084009e",
+              "label": "Cross-functional Delivery",
+              "text": "Collaborated with frontend engineers, QA engineers, and product teams to deliver integrated, high-quality features aligned with business requirements.",
+              "children": []
+            },
+            {
+              "id": "8ad3b7f0",
+              "label": "Mentorship",
+              "text": "Onboarded and mentored interns on backend development, API design, and SQL best practices.",
+              "children": []
+            },
+            {
+              "id": "c85c7228",
+              "label": "Documentation",
+              "text": "Documented APIs, system workflows, and deployment processes to improve knowledge sharing and onboarding efficiency.",
+              "children": []
+            },
+            {
+              "id": "29a2660e",
+              "label": "Code Reviews",
+              "text": "Participated in code reviews to ensure code quality, adherence to standards, and maintainability across services.",
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "11c600c6",
+          "org": "Astra Softech Pvt. Ltd. (Golyan Group)",
+          "location": "Kathmandu, Nepal",
+          "role": "Software Engineer Intern",
+          "period": "April 2024 - July 2024",
+          "bullets": [
+            {
+              "id": "00f55259",
+              "label": "Service Decomposition",
+              "text": "Refactored parts of a monolithic backend into modular services, introducing clearer service boundaries and improving codebase maintainability.",
+              "children": []
+            },
+            {
+              "id": "c8070703",
+              "label": "ERP Development",
+              "text": "Developed and maintained secure, scalable APIs for a knitwear manufacturing ERP system using Node.js/Express (backend).",
+              "children": []
+            },
+            {
+              "id": "53507b2a",
+              "label": "Redis Implementation",
+              "text": "Implemented real-time data caching using Redis to enhance system responsiveness.",
+              "children": []
+            },
+            {
+              "id": "2c6c1d91",
+              "label": "Logging",
+              "text": "Configured ELK stack (Elasticsearch, Logstash, Kibana) for centralized logging and system monitoring.",
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d5c747d8",
+      "title": "Personal Projects",
+      "enabled": true,
+      "kind": "projects",
+      "items": [
+        {
+          "id": "2cf4e65a",
+          "name": "LaTeX Résumé Builder",
+          "summary": "Résumé editor that typesets the classic LaTeX template with Typst compiled to WebAssembly: live preview and real PDF export",
+          "stack": "built with React, TypeScript, Vite, Tailwind, TanStack Query/Store, and typst.ts.",
+          "repoUrl": "https://github.com/akumaaayush/resume-builder",
+          "liveUrl": "https://resume.shahaayush.com.np/"
+        },
+        {
+          "id": "58e01898",
+          "name": "SastoReddit",
+          "summary": "A Reddit clone project",
+          "stack": "built with Next.js, GraphQL, PostgreSQL, TypeORM, ChakraUI, and Redis.",
+          "repoUrl": "https://github.com/akumaaayush/sastoreddit",
+          "liveUrl": "https://linkdir.vercel.app/"
+        },
+        {
+          "id": "f1deb6fb",
+          "name": "LinkDir",
+          "summary": "A link directory site that allows you to create and share a page with all your important links including a bio.",
+          "stack": "built with SvelteKit, Firebase (Authentication, Firestore Database, Storage), and TailwindCSS + DaisyUI",
+          "repoUrl": "https://github.com/akumaaayush/LinkDir",
+          "liveUrl": ""
+        },
+        {
+          "id": "d6612251",
+          "name": "OurSpace",
+          "summary": "A simple social networking site similar to Myspace.",
+          "stack": "built with Next.js, Auth.js, PostgreSQL, Prisma",
+          "repoUrl": "",
+          "liveUrl": ""
+        }
+      ]
+    },
+    {
+      "id": "3d793237",
+      "title": "Soft Skills",
+      "enabled": true,
+      "kind": "bullets",
+      "items": [
+        {
+          "id": "7f446e9e",
+          "text": "Critical Thinking"
+        },
+        {
+          "id": "1402c1b8",
+          "text": "Research Oriented"
+        },
+        {
+          "id": "8bc359e0",
+          "text": "Team Player"
+        },
+        {
+          "id": "8a14a1d2",
+          "text": "Problem Solving"
+        },
+        {
+          "id": "0f054fa8",
+          "text": "Attention to Detail"
+        }
+      ]
+    },
+    {
+      "id": "eb219e16",
+      "title": "Accomplishments",
+      "enabled": true,
+      "kind": "labeled",
+      "items": [
+        {
+          "id": "5e8be266",
+          "label": "Second Runner Up",
+          "text": "- HExGenius, Hackathon organized by Himalaya College of Engineering",
+          "meta": "July 2023"
+        },
+        {
+          "id": "584713cb",
+          "label": "College Representative",
+          "text": "- Code for Change, a non-profit organization",
+          "meta": "2021 - 2022"
+        }
+      ]
+    },
+    {
+      "id": "21b2985e",
+      "title": "Languages",
+      "enabled": true,
+      "kind": "bullets",
+      "items": [
+        {
+          "id": "bb8b1904",
+          "text": "English (Professional)"
+        },
+        {
+          "id": "3db5112e",
+          "text": "Nepali (Fluent)"
+        },
+        {
+          "id": "53078dc4",
+          "text": "Hindi (Professional)"
+        }
+      ]
+    }
+  ]
+}

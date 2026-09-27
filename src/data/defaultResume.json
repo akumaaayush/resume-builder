@@ -13,7 +13,8 @@
     "headingSize": 12,
     "blockSpacing": 4,
     "leading": 0.6,
-    "marker": "•"
+    "marker": "•",
+    "stackBulletLabels": false
   },
   "header": {
     "name": "Jordan Ellis",

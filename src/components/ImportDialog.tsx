@@ -1,18 +1,9 @@
 import { useState } from 'react'
 import { IMPORT_PROMPT } from '../lib/importPrompt'
+import { extractJson } from '../lib/json'
 import { normalizeResume } from '../lib/normalize'
 import { replaceResume } from '../store/resume'
 import { Btn, TextArea } from './ui'
-
-/** Strips code fences / stray prose that models like to wrap JSON in. */
-function extractJson(raw: string): string {
-  const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)```/i)
-  const body = (fenced ? fenced[1] : raw).trim()
-  const start = body.indexOf('{')
-  const end = body.lastIndexOf('}')
-  if (start === -1 || end === -1) throw new Error('no JSON object found in the pasted text')
-  return body.slice(start, end + 1)
-}
 
 export function ImportDialog({ onClose }: { onClose: () => void }) {
   const [pasted, setPasted] = useState('')

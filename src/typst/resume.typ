@@ -24,7 +24,7 @@
 )
 
 #set text(
-  font: (cfg.font, "New Computer Modern", "Libertinus Serif"),
+  font: (cfg.font, "New Computer Modern"),
   size: pt(cfg.fontSize),
   lang: "en",
   hyphenate: false,
@@ -54,11 +54,12 @@
   v(pt(2))
 }
 
-// \resumeItem: bold lead-in, then the body text.
-#let labeled-body(label, body, meta: "") = {
+// \resumeItem: bold lead-in, then the body text. `stack` drops the body onto
+// its own line beneath the lead-in instead of running on from it.
+#let labeled-body(label, body, meta: "", stack: false) = {
   if label != "" {
     strong(label)
-    [ ]
+    if stack { linebreak() } else { [ ] }
   }
   body
   if meta != "" {
@@ -113,14 +114,45 @@
 
 #let bullet-list(items) = {
   if items.len() == 0 { return }
-  list(..items.map(it => small(labeled-body(it.at("label", default: ""), it.text))))
+  list(
+    ..items.map(it => small(labeled-body(
+      it.at("label", default: ""),
+      it.text,
+      stack: cfg.at("stackBulletLabels", default: false),
+    ))),
+  )
+}
+
+// A bullet, plus any detail lines nested under it. The sub-list carries the
+// level-two marker the LaTeX template defined (\labelitemii = $\circ$).
+#let bullet-body(b) = {
+  small(labeled-body(b.label, b.text, stack: cfg.at("stackBulletLabels", default: false)))
+  let kids = b.at("children", default: ()).filter(k => k.text != "")
+  if kids.len() > 0 {
+    // Drawn, not typed and not math: the text ∘ sits near cap height, and a
+    // math glyph would need a math font the browser build does not ship. The
+    // -0.05em shift was calibrated against the x-height of this face.
+    list(
+      // `move`, not `baseline`: Typst aligns list markers itself and ignores a
+      // baseline shift on the marker box. 0.3em was calibrated to sit the ring
+      // on the x-height of this face.
+      marker: text(
+        size: pt(cfg.itemSize),
+        move(dy: 0.3em, circle(radius: 1.45pt, stroke: 0.4pt)),
+      ),
+      indent: 0.75em,
+      body-indent: 0.5em,
+      spacing: 0.5em,
+      ..kids.map(k => small(k.text)),
+    )
+  }
 }
 
 #let timeline-entry(e) = {
   subheading(e.org, e.location, e.role, e.period)
   if e.bullets.len() > 0 {
     v(pt(1))
-    list(..e.bullets.map(b => small(labeled-body(b.label, b.text))))
+    list(..e.bullets.map(bullet-body))
   }
   v(pt(3))
 }
