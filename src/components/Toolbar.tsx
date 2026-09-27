@@ -3,11 +3,13 @@ import { useStore } from '@tanstack/react-store'
 import { downloadJson, downloadPdf, pickJson } from '../lib/files'
 import { fsSupported } from '../lib/fileSystem'
 import { fileStore, linkNewFile, openFile, save, unlink } from '../store/file'
+import { gistStore } from '../store/gist'
 import { historyStore, redo, replaceResume, resetResume, undo } from '../store/resume'
 import { themeStore, toggleTheme } from '../store/theme'
 import type { PageFit as Fit } from '../typst/engine'
 import type { Resume } from '../types'
 import { Logo } from './Logo'
+import { GistDialog } from './GistDialog'
 import { PageFit } from './PageFit'
 import { ProfileSwitch } from './ProfileSwitch'
 import { Btn } from './ui'
@@ -32,6 +34,8 @@ export function Toolbar({
   const { canUndo, canRedo } = useStore(historyStore)
   const file = useStore(fileStore)
   const theme = useStore(themeStore)
+  const gist = useStore(gistStore)
+  const [showGist, setShowGist] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -103,6 +107,13 @@ export function Toolbar({
 
       <span className="mx-1 h-4 w-px bg-line" />
 
+      <Btn
+        onClick={() => setShowGist(true)}
+        data-tip={gist.gistId ? 'Gist sync' : 'Set up gist sync'}
+      >
+        {gist.busy ? '☁ …' : '☁ Sync'}
+        {gist.gistId && <span className="text-emerald-400">●</span>}
+      </Btn>
       <ProfileSwitch />
       <Btn onClick={onStartFromCv}>✦ From existing CV</Btn>
       <Btn onClick={importJson}>Import JSON</Btn>
@@ -147,6 +158,7 @@ export function Toolbar({
           {busy ? 'Compiling…' : '↓ Download PDF'}
         </Btn>
       </div>
+      {showGist && <GistDialog onClose={() => setShowGist(false)} />}
     </header>
   )
 }

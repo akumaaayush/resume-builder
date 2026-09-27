@@ -99,6 +99,20 @@ edit cycle, measured in-browser).
 | `Ctrl+S` | Save to the linked file |
 | `Ctrl+Z` / `Ctrl+Shift+Z` | Undo / redo |
 
+## Syncing across machines
+
+**☁ Sync** stores the document in a secret GitHub Gist: **Push** writes it,
+**Pull** loads it on another machine. Each push is a gist revision, so version
+history comes free.
+
+Paste a personal access token with only the **Gists: read and write**
+permission — it cannot reach repositories. Press **Create new gist** once, then
+use the same token and gist id elsewhere. Credentials live in that browser's
+localStorage and are sent only to `api.github.com`.
+
+A "secret" gist is unlisted rather than private, so treat its URL as the secret.
+Pulling replaces the open document and is undoable with Ctrl+Z.
+
 ## Switching documents while developing
 
 Any `examples/*.json` shows up in a **dev-only** dropdown in the toolbar, next
